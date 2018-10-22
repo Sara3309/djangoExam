@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>Books Review</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  </head>
+  <body>
+<div class="header" style="margin-bottom:20px; border:1px solid darkgrey; background-color:lightgrey;">
+    	<button style="margin-left:80%;width:70px; margin-top:10px;"><a href="/books" style="display:inline-block; color:black;">HOME</a></button>
+        <form action="/back" style="width:100px; margin-left:20px; display:inline-block;">
+            {% csrf_token %}
+    		<button type="submit" class="off" style="display:inline-block; margin-bottom:10px;">Log Out</button>
+    	</form>
+</div>
+    <h4 style=" margin-left:3%; width:50%;">{{request.session.book_title}}</h4>
+    <h5 style=" margin-left:3%; width:50%; margin-top:2%;">Author: {{request.session.book_author}}</h5> 
+    <div class="container" style="display:inline-block; display:inline-block; margin-top:3%; margin-left:2%; width:45%;">
+        {% for review in reviews %}  
+            <h5>Reviews:</h5>
+                <hr style="border-color:red;">
+                <p style="display:inline-block;">Rating:</p>
+                 {% for i in ratings %}
+                        {%if i < review.rating %}
+                            <span class="fa fa-star checked" style="color:orange"></span>
+                        {%else%}
+                            <span class="fa fa-star"></span>
+                        {%endif%}
+                    {% endfor %}
+                <p><a href="{{review.review_poster.id}}/user" style="text-decoration:underline;">{{review.review_poster}} </a>says: {{review.content}}.</p>
+                <p style="display:inline-block; margin-right:40%;">Posted on {{review.created_at}}</p>
+                {% if request.session.user %}
+            <a href="{{review.id}}/delete_review" style="text-decoration:underline; margin-bottom:8%;display:inline-block;">Delete this Review</a>
+                {% endif %}
+    {% endfor %}
+    </div>
+    
+    <div class="container2" style="display:inline-block; margin-left:10%; width:40%;vertical-align:top;">
+        <p class="review" style=" margin-right:4%; margin-top:8%;">Add a Review :</p>
+        <form action="{{book_id.id}}/book_review_add" method="post">
+            {% csrf_token %}
+                <input class = "review" type='text' style="width:100%; height:150px;"name="book_content" /><br>
+                    <p style="margin-top:10%; margin-right:2%;display:inline-block;">Rating:</p>
+                        <select name="star1" method="post">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    <p style="display:inline-block; margin-left:4%;">Stars</p>
+            <button type="submit" style="display:inline-block; margin-left:40%;">Submit</button>
+        </form>
+    </div>
+  
+  </body>
+  </html>

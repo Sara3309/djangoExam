@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>Books Review</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    
+  </head>
+  <body>
+    <div class="header" style="margin-bottom:20px; border:1px solid darkgrey; background-color:lightgrey;">
+    	<form action="/back">
+        {% csrf_token %}
+    		<h4 style="display:inline-block; margin-left:30px; width:200px; margin-top:10px;">Welcome  {{request.session.user}}</h4>
+    		<button style="margin-left:45%;"><a href='/books/add' style="display:inline-block; color:black;">Add Book and Review</a></button>
+    		<button type="submit" class="off" style="display:inline-block; margin-left:5%; margin-bottom:10px;">Log Out</button>
+    	</form>
+	</div>
+    <h5 style="margin-left:3%; margin-top:4%;">Recent Book Reviews:</h5>
+   
+        <div class="container" style="display:inline-block; margin-top:2%; margin-left:2%; width:45%;">
+         {% for review in reviews %}
+            <a href="{{review.book_reviewed.id}}/book_show" style="text-decoration:underline;">{{review.book_reviewed}}</a><br>
+                <p style="display:inline">Rating:</p>
+                    {% for i in ratings %}
+                        {% if i < review.rating %}
+                            <span class="fa fa-star checked" style="color:orange"></span>
+                        {% else %}
+                            <span class="fa fa-star"></span>
+                        {% endif %}
+                    {% endfor %}
+                 
+                <p><a href="{{review.review_poster.id}}/user" style="text-decoration:underline;">{{review.review_poster}} </a>says: {{review.content}}.</p>
+                <p style="display:inline-block; margin-right:40%;">Posted on {{review.created_at}}</p><br>
+        {% endfor %}
+        </div>
+    
+        <div class="container2" style="display:inline-block; margin-left:10%; width:40%;vertical-align:top;">
+            <p class="review" style=" margin-right:4%;">Other Books with Reviews:</p>
+                <div id="basic" name="basic" style="border:1px solid black; overflow:auto; width:90%; height:100px;">
+                    {% for book in books %}
+                    <a href="{{book.book_reviewed.id}}/book_show">{{book.book_reviewed}}</a><br>
+                    {% endfor %}
+                </div>
+        </div>
+        
+  
+
+  
+  </body>
+  </html>
